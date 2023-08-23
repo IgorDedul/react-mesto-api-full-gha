@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const { validateLogin, validateCreateUser } = require('./middlewares/validation');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 const NotFoundError = require('./errors/NotFoundError');
@@ -26,6 +27,7 @@ const limiter = rateLimit({
 });
 
 app.use(helmet());
+app.use(requestLogger);
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,6 +45,7 @@ app.use(require('./routes/users'));
 app.use(require('./routes/cards'));
 
 app.use((req, res, next) => next(new NotFoundError('Страницы по запрошенному URL не существует')));
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 

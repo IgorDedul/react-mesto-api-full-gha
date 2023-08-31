@@ -46,4 +46,4 @@ IP-адрес: 51.250.73.134
 
 Frontend: https://igord.nomoredomainsicu.ru
 
-Backend: https://...
+Backend: https://api.igord.nomoredomainsicu.ru

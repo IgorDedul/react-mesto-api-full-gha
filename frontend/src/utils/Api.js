@@ -89,9 +89,8 @@ class Api {
   }
   
   const api = new Api({
-    link: 'https://mesto.nomoreparties.co/v1/cohort-66/',
+    link: 'https://api.igord.nomoredomainsicu.ru',
     headers: {
-      authorization: '87e7fffd-44f4-496a-a376-493e7b9c6ebf',
       'Content-Type': 'application/json'
     }
   });

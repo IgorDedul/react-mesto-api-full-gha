@@ -1,6 +1,6 @@
 import { checkResponse } from './utils';
 
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.igord.nomoredomainsicu.ru';
 
 const headers = {
   Accept: 'application/json',

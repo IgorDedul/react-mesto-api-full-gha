@@ -1,6 +1,6 @@
 const ALLOWED_CORS = [
-  'https://igord.nomoredomainsicu.ru/',
-  'https://api.igord.nomoredomainsicu.ru/',
+  'https://igord.nomoredomainsicu.ru',
+  'https://api.igord.nomoredomainsicu.ru',
   'http://igord.nomoredomainsicu.ru',
   'http://api.igord.nomoredomainsicu.ru',
   'localhost:3000',

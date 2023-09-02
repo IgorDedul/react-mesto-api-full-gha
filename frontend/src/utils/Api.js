@@ -12,11 +12,21 @@ class Api {
       return Promise.reject(`код ошибки: ${res.status}`)
       }
     }
+
+    // Приватный метод включения токена авторизации в заголовок
+    _getHeaders() {
+      const token = localStorage.getItem('token');
+  
+      return {
+        'Authorization': `Bearer ${token}`,
+        ...this._headers,
+      };
+    }
   
     // Метод загрузки карточек с сервера
     getInitialCards() {
       return fetch(`${this._link}/cards`, {
-        headers: this._headers,
+        headers: this._getHeaders(),
         method: 'GET'
       })
         .then(res => this._parseResponse(res));
@@ -26,7 +36,7 @@ class Api {
     addCard(data) {
       return fetch(`${this._link}/cards`, {
         method: 'POST',
-        headers: this._headers,
+        headers: this._getHeaders(),
         body: JSON.stringify({
           name: data.name,
           link: data.link
@@ -39,7 +49,7 @@ class Api {
     deleteCard(cardId) {
       return fetch(`${this._link}/cards/${cardId}`, {
         method: 'DELETE',
-        headers: this._headers
+        headers: this._getHeaders()
       })
         .then(res => this._parseResponse(res));
     }
@@ -48,7 +58,7 @@ class Api {
     changeLikeCardStatus(cardId, isLiked) {
       return fetch(`${this._link}/cards/${cardId}/likes`, {
         method: `${!isLiked ? 'DELETE' : 'PUT'}`,
-        headers: this._headers
+        headers: this._getHeaders()
       })
         .then(res => this._parseResponse(res));
     }
@@ -56,7 +66,7 @@ class Api {
     // Метод получения данных пользователя с сервера
     getUserInfo() {
       return fetch(`${this._link}/users/me`, {
-        headers: this._headers,
+        headers: this._getHeaders(),
         method: 'GET'
       })
         .then(res => this._parseResponse(res));
@@ -66,7 +76,7 @@ class Api {
     setUserInfo(data) {
       return fetch(`${this._link}/users/me`, {
         method: 'PATCH',
-        headers: this._headers,
+        headers: this._getHeaders(),
         body: JSON.stringify({
           name: data.name,
           about: data.about
@@ -79,7 +89,7 @@ class Api {
     setUserAvatar(data) {
       return fetch(`${this._link}/users/me/avatar`, {
         method: 'PATCH',
-        headers: this._headers,
+        headers: this._getHeaders(),
         body: JSON.stringify({
           avatar: data.avatar
         })

@@ -7,18 +7,20 @@ const { secretKey } = 'SECRET_KEY';
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const { authorization } = req.headers;
 
-  if (!token) {
-    throw new UnauthorizedError('Необходима авторизация');
+  if (!authorization || !authorization.startsWith('Bearer')) {
+    return next(new UnauthorizedError('Необходима авторизация'));
   }
+
+  const token = authorization.split(' ')[1];
 
   let payload;
 
   try {
     payload = jwt.verify(token, (NODE_ENV === 'production') ? JWT_SECRET : secretKey);
   } catch (err) {
-    throw new UnauthorizedError('Необходима авторизация');
+    return next(new UnauthorizedError('Необходима авторизация'));
   }
 
   req.user = payload;

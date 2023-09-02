@@ -8,7 +8,9 @@ const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const { secretKey = 'SECRET_KEY' } = process.env;
+const { secretKey } = 'SECRET_KEY';
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 //  Возвращает всех пользователей
 const getUsers = (req, res, next) => {
@@ -141,7 +143,7 @@ const login = (req, res, next) => {
             throw new UnauthorizedError('Неправильные логин или пароль');
           }
 
-          const token = jwt.sign({ _id: user._id }, secretKey, { expiresIn: '7d' });
+          const token = jwt.sign({ _id: user._id }, (NODE_ENV === 'production') ? JWT_SECRET : secretKey, { expiresIn: '7d' });
 
           res
             .cookie('jwt', token, {

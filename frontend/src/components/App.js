@@ -183,6 +183,7 @@ function App() {
     return auth
       .authorize(password, email)
         .then((data) => {
+          console.log(data); 
           if (data.token) {
             setIsLoggedIn(true);
             localStorage.setItem('token', data.token);

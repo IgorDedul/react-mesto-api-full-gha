@@ -209,7 +209,7 @@ function App() {
 
     if (token) {
       auth
-        .checkToken(token)
+        .getContent(token)
           .then((res) => {
             if (res.data) {
               setAuthorizationEmail(res.data.email); // (data.data.email)

@@ -179,14 +179,16 @@ function App() {
   };
 
   // Авторизация профиля
-  const handleAuthorization = (data) => {
+  const handleAuthorization = ({ password, email }) => {
     return auth
-      .authorize(data)
-      .then((data) => {
-        setIsLoggedIn(true);
-        localStorage.setItem('jwt', data.token);
-        handleTokenCheck();
-        history.push('/');
+      .authorize(password, email)
+        .then((data) => {
+          if (data.token) {
+            setIsLoggedIn(true);
+            localStorage.setItem('token', data.token);
+            handleTokenCheck();
+            history.push('/');
+          }
       })
       .catch((err) => {
         console.log(err);
@@ -197,24 +199,28 @@ function App() {
   // Выход
   const handleSignOut = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('token');
     history.push('/sign-in');
   };
 
   // Проверка токена
   const handleTokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
-    if (!jwt) {
-      return;
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      auth
+        .checkToken(token)
+          .then((res) => {
+            if (res.data) {
+              setAuthorizationEmail(res.data.email); // (data.data.email)
+              setIsLoggedIn(true);
+              history.push('/');
+            }
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err.status}`);
+          });
     }
-    auth
-      .getContent(jwt)
-      .then((data) => {
-        setAuthorizationEmail(data.data.email);
-        setIsLoggedIn(true);
-        history.push('/');
-      })
-      .catch((err) => console.log(err));
   };
 
   React.useEffect(() => {

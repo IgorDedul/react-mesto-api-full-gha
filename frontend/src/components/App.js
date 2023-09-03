@@ -43,6 +43,7 @@ function App() {
   const [authorizationEmail, setAuthorizationEmail] = React.useState('');
 
   const history = useHistory();
+  console.log('test');
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])

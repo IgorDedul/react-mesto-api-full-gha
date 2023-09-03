@@ -8,7 +8,7 @@ const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const { secretKey } = 'SECRET_KEY';
+const { secretKey } = 'dev-secret-key';
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 

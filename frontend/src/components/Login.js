@@ -1,50 +1,48 @@
-import React from "react";
+import useFormValidation from '../hooks/useFormValidation';
 
-function Login({ onLogin }) {
-  const [password, setPassword] = React.useState("");
-  const [email, setEmail] = React.useState("");
+const Login = ({ onLogin }) => {
+  const { enteredValues, errors, handleChange } = useFormValidation({});
 
-  function handleChangePassword(e) {
-    setPassword(e.target.value);
-  }
-
-  function handleChangeEmail(e) {
-    setEmail(e.target.value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    onLogin(password, email);
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!enteredValues.email || !enteredValues.password) {
+      return;
+    }
+    onLogin(enteredValues);
+  };
 
   return (
-    <div className="form">
-      <h2 className="form__title">Вход</h2>
-      <form className="login" onSubmit={handleSubmit}>
+    <div className="auth">
+      <h2 className="auth__title">Вход</h2>
+      <form className="popup__input-list auth__form" onSubmit={handleSubmit} noValidate>
         <input
-          className="form__input"
           type="email"
           placeholder="Email"
           name="email"
-          value={email}
-          onChange={handleChangeEmail}
+          id="email"
+          autoComplete="email"
+          value={enteredValues.email || ''}
+          onChange={handleChange}
           required
         />
+        <span className="popup__input-error auth__error">{errors.email}</span>
         <input
-          className="form__input"
           type="password"
-          placeholder="Пароль"
+          minLength="8"
           name="password"
-          value={password}
-          onChange={handleChangePassword}
+          id="password"
+          placeholder="Пароль"
+          autoComplete="password"
+          value={enteredValues.password || ''}
+          onChange={handleChange}
           required
         />
-        <button className="form__button" type="submit">
-          Войти
-        </button>
+        <span className="auth__error">{errors.password}</span>
+        <button type="submit">Войти</button>
+        <span className="auth__login-hint"></span>
       </form>
     </div>
   );
-}
+};
 
 export default Login;

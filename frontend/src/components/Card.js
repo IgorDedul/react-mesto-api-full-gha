@@ -1,55 +1,63 @@
 import React from "react";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
+import { useContext } from "react";
 
-export default React.memo(function Card({
-  card,
-  onCardClick,
-  onCardLike,
-  onConfirmCardDelete,
-}) {
-  const currentUser = React.useContext(CurrentUserContext);
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+
+const Card = ({ card, onCardClick, onCardLike, onCardDeleteClick }) => {
+
+  const currentUser = useContext(CurrentUserContext);
+
+  // Определяем, являемся ли мы владельцем текущей карточки
   const isOwn = card.owner._id === currentUser._id;
-  const isLiked = card.likes.some((i) => i === currentUser._id);
-  const cardLikeButtonClassName = `button heart ${
-    isLiked && "heart_status_active"
+
+  // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+  const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  // Создаём переменную, которую после зададим в `className` для кнопки лайка
+  const cardLikeButtonClassName = `element__like ${
+    isLiked ? "element__like_active" : ""
   }`;
 
-  function handleClick() {
+ //Вызовы функций увеличения, лайка, удаления.
+  const handleClick = () => {
     onCardClick(card);
-  }
+  };
 
-  function handleLikeClick() {
+  const handleLikeClick = () => {
     onCardLike(card);
-  }
+  };
 
-  function handleDeleteClick() {
-    onConfirmCardDelete(card);
-  }
+  const handleDeleteClick = () => {
+    onCardDeleteClick(card._id);
+  };
 
   return (
     <>
-      {isOwn && (
-        <button
-          className="button gallery__delete"
-          onClick={handleDeleteClick}
-        />
-      )}
-      <img
-        className="gallery__pic"
-        src={card.link}
-        alt={card.name}
-        onClick={handleClick}
-      />
-      <div className="gallery__desc">
-        <h2 className="gallery__title">{card.name}</h2>
-        <div>
-          <button
-            className={cardLikeButtonClassName}
-            onClick={handleLikeClick}
-          />
-          <p className="gallery__count">{card.likes.length}</p>
+        <div className="element__card">
+          {isOwn && <button 
+                onClick={handleDeleteClick}
+                className="element__delete-button" 
+                type="button" 
+                aria-label="Удалить"/>}   
+            <img 
+                src={card.link}
+                alt={card.name}
+                onClick={handleClick}
+                className="element__image"/>
+            <div className="element__border"> 
+                <h2 className="element__name">{card.name}</h2>
+                <div className="element__like-container">
+                <button 
+                    className= {cardLikeButtonClassName}
+                    onClick={handleLikeClick}
+                    type="button" 
+                    aria-label="Нравится">
+                </button>
+                <p className="element__like-counter">{card.likes.length}</p>
+                </div>  
+            </div>
         </div>
-      </div>
-    </>
+    </> 
   );
-});
+};
+
+export default Card;

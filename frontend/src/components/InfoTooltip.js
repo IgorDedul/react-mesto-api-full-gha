@@ -1,17 +1,26 @@
-function InfoTooltip({ isOpen, onClose, text, image }) {
+import successIcon from '../images/success-icon.svg';
+import unsuccessIcon from '../images/unsuccess-icon.svg';
+
+const InfoTooltip = ({ isOpen, onClose, isSuccess }) => {
   return (
-    <div className={`popup info-tooltip ${isOpen ? `popup_opened` : ``}`}>
+    <div className={`popup ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
-        <button
-          onClick={onClose}
-          className="button button_action_close"
-          aria-label="Закрыть"
+        <button type="button" className="popup__close-button" onClick={onClose} />
+        <img
+          src={isSuccess ? successIcon : unsuccessIcon}
+          alt={
+            isSuccess ? 'Регистрация прошла успешно' : 'Ошибка регистрации'
+          }
+          className="popup__signup-icon"
         />
-        <img src={image} alt="" className="info-tooltip__image" />
-        <p className="info-tooltip__text">{text}</p>
+        <h3 className="popup__signup-title">
+          {isSuccess
+            ? 'Вы зарегистрированы!'
+            : 'Ошибка! Попробуйте ещё раз.'}
+        </h3>
       </div>
     </div>
   );
-}
+};
 
 export default InfoTooltip;

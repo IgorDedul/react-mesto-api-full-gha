@@ -1,19 +1,25 @@
-const allowedCors = [
-  'https://voloh.nomoredomainsicu.ru',
-  'http://voloh.nomoredomainsicu.ru',
-  'http://localhost:3000',
+const ALLOWED_CORS = [
+  'https://igord.nomoredomainsicu.ru',
+  'https://api.igord.nomoredomainsicu.ru',
+  'http://igord.nomoredomainsicu.ru',
+  'http://api.igord.nomoredomainsicu.ru',
+  'localhost:3000',
 ];
-const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+const ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
 module.exports = (req, res, next) => {
-  const { method } = req;
   const { origin } = req.headers;
-  if (allowedCors.includes(origin)) {
+  const { method } = req;
+  const requestHeaders = req.headers['access-control-request-headers'];
+
+  if (ALLOWED_CORS.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
+
   if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token, X-HTTP-Method-Override');
+    res.header('Access-Control-Allow-Methods', ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+
     return res.end();
   }
 

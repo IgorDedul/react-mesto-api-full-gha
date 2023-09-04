@@ -1,6 +1,10 @@
-module.exports = class NotFoundError extends Error {
+// Не найдено
+
+class NotFoundError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 404;
+    this.status = 404;
   }
-};
+}
+
+module.exports = NotFoundError;

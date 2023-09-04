@@ -1,6 +1,10 @@
-module.exports = class ForbiddenError extends Error {
+// Такого пользователя не существует
+
+class ForbiddenError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 403;
+    this.status = 403;
   }
-};
+}
+
+module.exports = ForbiddenError;

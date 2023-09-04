@@ -1,6 +1,10 @@
-module.exports = class ConflictError extends Error {
+// Такой пользователь уже существует
+
+class ConflictError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 409;
+    this.status = 409;
   }
-};
+}
+
+module.exports = ConflictError;

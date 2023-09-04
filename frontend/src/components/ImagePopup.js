@@ -1,21 +1,17 @@
-function ImagePopup({ card, onClose }) {
+import React from "react";
+
+const ImagePopup = ({ card, onClose }) => {
   return (
     <div className={`popup popup_image ${card.link ? "popup_opened" : ""}`}>
-      <div className="popup__image-container">
-        <button
-          className="button button_action_close"
-          aria-label="Закрыть"
-          onClick={onClose}
-        ></button>
-        {card && (
-          <>
-            <img className="popup__image" src={card.link} alt={card.name} />
-            <h2 className="popup__desc">{card.name}</h2>
-          </>
-        )}
+      <div className="popup__content-image">
+        <button type="button" className="popup__close-button popup__close-image-button" onClick={onClose}></button>
+        <figure className="popup__figure">
+          <img className="popup__link-image" src={card.link} alt={card.name}/>
+          <figcaption className="popup__name-image">{card.name}</figcaption>
+        </figure>
       </div>
     </div>
   );
-}
+};
 
 export default ImagePopup;

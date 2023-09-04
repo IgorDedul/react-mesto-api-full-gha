@@ -1,22 +1,24 @@
-function PopupWithForm(props) {
-  function handlePopupMouseDown(event) {
-    if (event.target === event.currentTarget || event.target.classList.contains('popup__close')) {
-      props.onClose();
-    }
-  }
+import React from "react";
 
+const PopupWithForm = (props) => {
   return (
-    <div className={`popup popup_type_${props.name} popup_background_dark-light ${(props.isOpen) ? 'popup_opened' : ''}`} onMouseDown={handlePopupMouseDown}>
+    <div className={`popup popup_${props.name} ${props.isOpen ? "popup_opened" : ""}`}>
       <div className="popup__container">
-        <button className="popup__close link" type="button"></button>
-        <h3 className="popup__title">{props.title}</h3>
-        <form className="popup__form" name={props.name} onSubmit={props.onSubmit}>
-          {props.children}
-          <button className="popup__submit link" type="submit">{props.buttonText}</button>
-        </form>
+        <button type="button" className="popup__close-button" onClick={props.onClose}></button>
+        <div className="popup__content">  
+          <h3 className="popup__title">{props.title}</h3>
+          <form
+            name={`${props.name}`}
+            action="#"
+            className="popup__input-list"
+            onSubmit={props.onSubmit}>
+            {props.children}
+            <button className="popup__save-button" type="submit" aria-label="Сохранить">{props.isLoading ? 'Сохранение...' : props.buttonText}</button>
+          </form>
+        </div>  
       </div>
     </div>
   );
-}
+};
 
 export default PopupWithForm;

@@ -1,24 +1,17 @@
-import React from 'react';
-import { SelectedCardContext } from '../contexts/SelectedCardContext';
+import React from "react";
 
-function ImagePopup(props) {
-  const selectedCard = React.useContext(SelectedCardContext);
-
-  function handlePopupMouseDown(event) {
-    if (event.target === event.currentTarget || event.target.classList.contains('popup__close')) {
-      props.onClose();
-    }
-  }
-
+const ImagePopup = ({ card, onClose }) => {
   return (
-    <div className={`popup popup_type_image popup_background_dark-light ${(Object.entries(selectedCard).length) ? 'popup_opened' : ''}`} onMouseDown={handlePopupMouseDown}>
-      <div className="popup__container-img">
-        <button className="popup__close link" type="button"></button>
-        <img className="popup__img" src={selectedCard.link} alt="Изображение из карточки" />
-        <h3 className="popup__title-img">{selectedCard.name}</h3>
+    <div className={`popup popup_image ${card.link ? "popup_opened" : ""}`}>
+      <div className="popup__content-image">
+        <button type="button" className="popup__close-button popup__close-image-button" onClick={onClose}></button>
+        <figure className="popup__figure">
+          <img className="popup__link-image" src={card.link} alt={card.name}/>
+          <figcaption className="popup__name-image">{card.name}</figcaption>
+        </figure>
       </div>
     </div>
   );
-}
+};
 
 export default ImagePopup;

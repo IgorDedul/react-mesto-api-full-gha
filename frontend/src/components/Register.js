@@ -1,40 +1,50 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useFormValidation from '../hooks/useFormValidation';
 
-function Register({ onSubmit }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Register = ({ onRegister }) => {
+  const { enteredValues, errors, handleChange } = useFormValidation();
 
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
-  }
-
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    onSubmit({ password, email });
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onRegister(enteredValues);
+  };
 
   return (
-    <section className="register">
-      <h1 className="register__title">Регистрация</h1>
-      <form onSubmit={handleSubmit} className="register__form" name="register">
-        <input onChange={handleEmailChange} value={email} id="register-email-input" className="register__input register__input_type_email" type="email" name="register-email" placeholder="Email" required />
-        <span className="register__input-error register-email-input-error"></span>
-        <input onChange={handlePasswordChange} value={password} id="register-password-input" className="register__input register__input_type_password" type="password" name="register-password" placeholder="Пароль" required />
-        <span className="register__input-error register-password-input-error"></span>
-        <button className="register__submit" type="submit">Зарегистрироваться</button>
-      </form>
-      <div className="register__signin">
-        <p className="register__signin-text">Уже зарегистрированы?&ensp;</p>
-        <Link to="/sign-in" className="register__link">Войти</Link>
+    <>
+      <div className="auth">
+        <h2 className="auth__title">Регистрация</h2>
+        <form className="popup__input-list auth__form" onSubmit={handleSubmit}>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            autoComplete="email"
+            value={enteredValues.email || ''}
+            onChange={handleChange}
+            required
+          />
+          <span className="popup__input-error auth__error">{errors.email}</span>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            minLength="8"
+            placeholder="Пароль"
+            autoComplete="password"
+            value={enteredValues.password || ''}
+            onChange={handleChange}
+            required
+          />
+          <span className="popup__input-error auth__error">{errors.password}</span>
+          <button type="submit">Зарегистрироваться</button>
+        </form>
       </div>
-    </section>
+      <Link to="/sign-in" className="auth__login-hint">
+        Уже зарегистрированы? Войти
+      </Link>
+    </>
   );
-}
+};
 
 export default Register;

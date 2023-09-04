@@ -1,17 +1,13 @@
-import { useLocation } from 'react-router-dom';
+import React from "react";
 
-function Footer() {
-  const location = useLocation();
-
+const Footer = () => {
   return (
     <>
-      {location.pathname === '/' && (
-        <footer className="footer">
-          <p className="footer__copyright">© 2022. Алексей Лавриненков</p>
-        </footer>
-      )}
+      <footer className="footer">
+        <p className="footer__copyright">&copy;2023 Mesto Russia</p>
+      </footer>
     </>
   );
-}
+};
 
 export default Footer;

@@ -1,0 +1,13 @@
+.popup__input-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  margin: 75px 22px 25px;
+}
+
+@media screen and (min-width: 768px) {
+  .popup__input-list {
+    margin: 41px 36px 36px;
+  }
+}

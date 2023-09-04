@@ -1,0 +1,9 @@
+.cards__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 22px 15px 22px 21px;
+  min-height: 35px;
+}
+
+

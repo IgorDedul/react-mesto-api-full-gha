@@ -1,0 +1,9 @@
+.cards__card {
+  min-height: 361px;
+  width: 282px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 15px;
+  position: relative;
+}

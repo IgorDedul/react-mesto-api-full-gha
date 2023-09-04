@@ -1,34 +1,51 @@
-import { checkResponse } from './utils';
+import { baseUrl } from "./constants";
 
-export const BASE_URL = 'https://api.igord.nomoredomainsicu.ru';
+const checkResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
 
-const headers = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-};
+  return Promise.reject(`Ошибка: ${res.status}`)
+}
 
-export const register = ({ email, password }) => {
-  return fetch(`${BASE_URL}/signup`, {
+export const register = (password, email) => {
+  return fetch(`${baseUrl}/signup`, {
     method: 'POST',
-    headers,
-    body: JSON.stringify({ email, password }),
-  }).then((res) => checkResponse(res));
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ password, email })
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
 };
 
-export const authorize = ({ email, password }) => {
-  return fetch(`${BASE_URL}/signin`, {
+export const authorize = (password, email) => {
+  return fetch(`${baseUrl}/signin`, {
     method: 'POST',
-    headers,
-    body: JSON.stringify({ email, password }),
-  }).then((res) => checkResponse(res));
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ password, email })
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
 };
 
-export const getContent = (token) => {
-  return fetch(`${BASE_URL}/users/me`, {
+export const checkToken = (token) => {
+  return fetch(`${baseUrl}/users/me`, {
     method: 'GET',
     headers: {
-      ...headers,
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((res) => checkResponse(res));
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
 };

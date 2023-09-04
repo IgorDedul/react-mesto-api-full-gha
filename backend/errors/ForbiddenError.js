@@ -1,5 +1,3 @@
-// Такого пользователя не существует
-
 class ForbiddenError extends Error {
   constructor(message) {
     super(message);

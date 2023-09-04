@@ -1,38 +1,49 @@
-import { useState } from 'react';
+import React from "react";
 
-function Login({ onSubmit }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function Login({ onLogin }) {
+  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = React.useState("");
 
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
+  function handleChangePassword(e) {
+    setPassword(e.target.value);
   }
 
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    setEmail('');
-    setPassword('');
-    onSubmit({ password, email });
+    onLogin(password, email);
   }
 
   return (
-    <section className="login">
-      <div className="login__container">
-        <h1 className="login__title">Вход</h1>
-        <form onSubmit={handleSubmit} className="login__form" name="login">
-          <input onChange={handleEmailChange} value={email} id="login-email-input" className="login__input login__input_type_email" type="email" name="login-email" placeholder="Email" required />
-          <span className="login__input-error login-email-input-error"></span>
-          <input onChange={handlePasswordChange} value={password} id="login-password-input" className="login__input login__input_type_password" type="password" name="login-password" placeholder="Пароль" required />
-          <span className="login__input-error login-password-input-error"></span>
-          <button className="login__submit" type="submit">Войти</button>
-        </form>
-      </div>
-    </section>
+    <div className="form">
+      <h2 className="form__title">Вход</h2>
+      <form className="login" onSubmit={handleSubmit}>
+        <input
+          className="form__input"
+          type="email"
+          placeholder="Email"
+          name="email"
+          value={email}
+          onChange={handleChangeEmail}
+          required
+        />
+        <input
+          className="form__input"
+          type="password"
+          placeholder="Пароль"
+          name="password"
+          value={password}
+          onChange={handleChangePassword}
+          required
+        />
+        <button className="form__button" type="submit">
+          Войти
+        </button>
+      </form>
+    </div>
   );
 }
 

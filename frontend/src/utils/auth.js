@@ -1,51 +1,41 @@
-import { baseUrl } from "./constants";
+const BASE_URL = "https://api.voloh.nomoredomainsicu.ru";
 
-const checkResponse = (res) => {
-  if (res.ok) {
-    return res.json();
+const getResponseData = (res) => {
+  if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
   }
-
-  return Promise.reject(`Ошибка: ${res.status}`)
+  return res.json();
 }
 
-export const register = (password, email) => {
-  return fetch(`${baseUrl}/signup`, {
-    method: 'POST',
+function register(password, email) {
+  return fetch(`${BASE_URL}/signup`, {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ password, email })
-  })
-    .then((res) => {
-      return checkResponse(res);
-    })
-};
+    body: JSON.stringify({ password, email }),
+  }).then((result) => getResponseData(result));
+}
 
-export const authorize = (password, email) => {
-  return fetch(`${baseUrl}/signin`, {
-    method: 'POST',
+function authorization(password, email) {
+  return fetch(`${BASE_URL}/signin`, {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ password, email })
+    body: JSON.stringify({ password, email }),
   })
-    .then((res) => {
-      return checkResponse(res);
-    })
-};
+    .then((result) => getResponseData(result))
+}
 
-export const checkToken = (token) => {
-  return fetch(`${baseUrl}/users/me`, {
-    method: 'GET',
+function getToken(token) {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "GET",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  })
-    .then((res) => {
-      return checkResponse(res);
-    })
-};
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((result) => getResponseData(result));
+}
+
+export { register, authorization, getToken };

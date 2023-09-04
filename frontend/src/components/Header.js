@@ -1,37 +1,75 @@
-import React from 'react';
-import { Link, useLocation} from 'react-router-dom';
-import mestoLogoPath from '../images/logo.svg';
+import React from "react";
+import { LoggedInContext } from "../contexts/LoggedInContext.js";
+import { Link, useLocation, Routes, Route } from "react-router-dom";
 
-function Header({ onLogout, currentEmail }) {
+function Header({ onSignOut, email }) {
+  const loggedIn = React.useContext(LoggedInContext);
+
+  const [isAccount, setIsAccount] = React.useState(false);
   const location = useLocation();
 
-  function handleLogoutClick() {
-    onLogout();
+  function handleClick() {
+    setIsAccount(isAccount ? false : true);
   }
 
   return (
-    <header className="header" id="main">
-      <a className="link" href="#main">
-        <img className="header__logo" src={mestoLogoPath} alt="Логотип Mesto" />
-      </a>
-      {location.pathname === '/' && (
-        <nav className="header__menu">
-          <p className="header__email">{currentEmail}</p>
-          <Link onClick={handleLogoutClick} to="/sign-in" className="header__link link">Выйти</Link>
-        </nav>
-      )}
-
-      {location.pathname === '/sign-in' && (
-        <nav className="header__menu">
-          <Link to="/sign-up" className="header__link link">Регистрация</Link>
-        </nav>
-      )}
-
-      {location.pathname === '/sign-up' && (
-        <nav className="header__menu">
-          <Link to="/sign-in" className="header__link link">Войти</Link>
-        </nav>
-      )}
+    <header className="header">
+      <div className="header__logo"></div>
+      <Routes>
+        <Route
+          path="/sign-in"
+          element={
+            location.pathname === "/sign-in" && !loggedIn ? (
+              <Link to="/sign-up" className="header__link">
+                Регистрация
+              </Link>
+            ) : (
+              ""
+            )
+          }
+        />
+        <Route
+          path="sign-up"
+          element={
+            location.pathname === "/sign-up" && !loggedIn ? (
+              <Link to="/sign-in" className="header__link">
+                Войти
+              </Link>
+            ) : (
+              ""
+            )
+          }
+        />
+        <Route
+          path="/"
+          element={
+            loggedIn && (
+              <>
+                <div
+                  className={
+                    isAccount ? "header__account_close" : "header__burger"
+                  }
+                  onClick={handleClick}
+                ></div>
+                <div
+                  className={`header__account ${
+                    isAccount ? "header__account_opened" : ""
+                  }`}
+                >
+                  <span className="header__email">{email}</span>
+                  <span
+                    className="header__link"
+                    style={{ color: "#a9a9a9" }}
+                    onClick={onSignOut}
+                  >
+                    Выйти
+                  </span>
+                </div>
+              </>
+            )
+          }
+        />
+      </Routes>
     </header>
   );
 }

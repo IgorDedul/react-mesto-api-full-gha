@@ -1,113 +1,110 @@
-import { baseUrl } from './constants';
-
 class Api {
-  constructor({ url, headers }) {
-    this._url = url;
-    this._headers = headers;
+  constructor({ baseUrl }) {
+    this._baseUrl = baseUrl;
+    this.userId = null;
   }
 
-  _checkResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
+  _request(endpoint, options) {
+    return fetch(`${this._baseUrl}/${endpoint}`, options).then((res) =>
+      this._getResponseData(res)
+    );
+  }
 
-    return Promise.reject(`Ошибка: ${res.status}`)
+  _getResponseData(res) {
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
   }
 
   _getHeaders() {
     const token = localStorage.getItem('token');
-
     return {
-      'Authorization': `Bearer ${token}`,
-      ...this._headers,
-    };
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
   }
+
 
   getUserInfo() {
-    return fetch(`${this._url}/users/me`, {
-      headers: this._getHeaders(),
-    })
-      .then((res) => {
-        return this._checkResponse(res);
-      })
+    return this._request("users/me", { headers: this._getHeaders() }).then(
+      (resp) => {
+        this.userId = resp._id;
+        return resp.data;
+      }
+    );
   }
 
-  getInitialCards() {
-    return fetch(`${this._url}/cards`, {
-      headers: this._getHeaders(),
-    })
-      .then((res) => {
-        return this._checkResponse(res);
-      })
+  getCards() {
+    return this._request("cards", { headers: this._getHeaders() }).then(
+      (resp) => {
+        return resp.data;
+      }
+    );
   }
 
-  saveUserInfo(data) {
-    return fetch(`${this._url}/users/me`, {
-      method: 'PATCH',
+  setUserInfo(data) {
+    return this._request("users/me", {
+      method: "PATCH",
       headers: this._getHeaders(),
       body: JSON.stringify({
-        name: `${data.name}`,
-        about: `${data.about}`
-      })
+        name: data.name,
+        about: data.about,
+      }),
     })
-      .then((res) => {
-        return this._checkResponse(res);
-      })
+      .then((resp) => {
+        return resp.data;
+      });
   }
 
-  saveAvatar(data) {
-    return fetch(`${this._url}/users/me/avatar`, {
-      method: 'PATCH',
+  setUserAvatar(data) {
+    return this._request("users/me/avatar", {
+      method: "PATCH",
       headers: this._getHeaders(),
       body: JSON.stringify({
-        avatar: `${data.avatar}`
-      })
+        avatar: data.avatar,
+      }),
     })
-      .then((res) => {
-        return this._checkResponse(res);
-      })
+      .then((resp) => {
+        return resp.data;
+      });
   }
 
-  addNewCard(data) {
-    return fetch(`${this._url}/cards`, {
-      method: 'POST',
+  addCard(data) {
+    return this._request("cards", {
+      method: "POST",
       headers: this._getHeaders(),
       body: JSON.stringify({
-        name: `${data.title}`,
-        link: `${data.link}`
-      })
+        name: data.name,
+        link: data.link,
+      }),
     })
-      .then((res) => {
-        return this._checkResponse(res);
-      })
+      .then((resp) => {
+        return resp.data;
+      });
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._url}/cards/${cardId}`, {
-      method: 'DELETE',
+    return this._request(`cards/${cardId}`, {
+      method: "DELETE",
       headers: this._getHeaders(),
-    })
-      .then((res) => {
-        return this._checkResponse(res);
-      })
+    });
   }
 
-  changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
-      method: (isLiked) ? 'PUT' : 'DELETE',
+  changeLikeCardStatus(cardId, isLike) {
+    return this._request(`cards/${cardId}/likes`, {
+      method: `${isLike ? "PUT" : "DELETE"}`,
       headers: this._getHeaders(),
-    })
-      .then((res) => {
-        return this._checkResponse(res);
-      })
+    }).then(
+      (resp) => {
+        return resp.data;
+      }
+    );
   }
 }
 
 const api = new Api({
-  url: baseUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  }
+  baseUrl: "https://api.voloh.nomoredomainsicu.ru"
 });
 
-export default api;
+export { api };

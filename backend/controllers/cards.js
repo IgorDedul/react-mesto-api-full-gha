@@ -1,110 +1,58 @@
 const Card = require('../models/card');
-const NotFoundError = require('../errors/NotFoundError');
-const ValidationError = require('../errors/ValidationError');
 const ForbiddenError = require('../errors/ForbiddenError');
+const NotFoundError = require('../errors/NotFoundError');
+const { OK, CREATED } = require('../constantsStatus');
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .populate(['owner', 'likes'])
-    .then((cards) => {
-      res.send(cards);
-    })
-    .catch((err) => {
-      next(err);
-    });
+    .populate('owner')
+    .then((card) => res.status(OK).send({ data: card }))
+    .catch((err) => next(err));
 };
 
 const createCard = (req, res, next) => {
-  const { name, link } = req.body;
-  const owner = req.user._id;
-
-  Card.create({ name, link, owner })
-    .then((card) => card.populate(['owner', 'likes']))
-    .then((card) => {
-      res.send(card);
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return next(new ValidationError('Переданы некорректные данные в метод создания карточки'));
-      }
-
-      return next(err);
-    });
+  const {
+    name, link,
+  } = req.body;
+  Card.create({
+    name, link, owner: req.user,
+  })
+    .then((card) => Card.findById(card._id).populate('owner'))
+    .then((card) => res.status(CREATED).send({ data: card }))
+    .catch((err) => next(err));
 };
 
 const deleteCard = (req, res, next) => {
-  const { cardId } = req.params;
-
-  Card.findById(cardId)
+  Card.findById(req.params.cardId)
+    .orFail(new NotFoundError('Карточка с указанным _id не найдена. Не существующий id'))
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка не найдена');
+      if (card.owner._id.toString() !== req.user._id) {
+        throw new ForbiddenError('Нельзя удалить чужую карточку');
       }
-
-      if (card.owner.toString() !== req.user._id) {
-        throw new ForbiddenError('Удаление чужой карточки');
-      }
-
-      return Card.findByIdAndRemove(cardId)
-        .populate(['owner', 'likes'])
-        .then((myCard) => {
-          res.send(myCard);
-        })
-        .catch((err) => {
-          next(err);
+      Card.deleteOne(card)
+        .then((deletedCard) => {
+          res.status(OK).send({ data: deletedCard });
         });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new ValidationError('Некорректный id карточки'));
-      }
-
-      return next(err);
-    });
+    .catch((err) => next(err));
 };
 
-const likeCard = (req, res, next) => {
+const addLikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $addToSet: { likes: req.user._id } }, { new: true })
-    .populate(['owner', 'likes'])
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка не найдена');
-      }
-
-      res.send(card);
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new ValidationError('Некорректный id карточки'));
-      }
-
-      return next(err);
-    });
+    .populate('owner')
+    .orFail(new NotFoundError('Передан несуществующий _id карточки'))
+    .then((card) => res.status(OK).send({ data: card }))
+    .catch((err) => next(err));
 };
 
-const dislikeCard = (req, res, next) => {
+const deleteLikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
-    .populate(['owner', 'likes'])
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка не найдена');
-      }
-
-      res.send(card);
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new ValidationError('Некорректный id карточки'));
-      }
-
-      return next(err);
-    });
+    .populate('owner')
+    .orFail(new NotFoundError('Передан несуществующий _id карточки'))
+    .then((card) => res.status(OK).send({ data: card }))
+    .catch((err) => next(err));
 };
 
 module.exports = {
-  getCards,
-  createCard,
-  deleteCard,
-  likeCard,
-  dislikeCard,
+  getCards, createCard, deleteCard, addLikeCard, deleteLikeCard,
 };

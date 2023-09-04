@@ -1,1 +1,1 @@
-export const baseUrl = 'https://api.mesto.service.nomoredomainsclub.ru';
+export const baseUrl = 'https://api.igord.nomoredomainsicu.ru/';

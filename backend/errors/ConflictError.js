@@ -1,3 +1,5 @@
+// Такой пользователь уже существует
+
 class ConflictError extends Error {
   constructor(message) {
     super(message);

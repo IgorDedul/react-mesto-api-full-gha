@@ -1,5 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
-const { linkRegex } = require('../utils/constants');
+
+const linkRegex = /^https?:\/\/(www\.)?[0-9a-zA-Z]+([.|-]{1}[0-9a-zA-Z]+)*\.[0-9a-zA-Z-]+(\/[0-9a-zA-Z\-._~:/?#[\]@!$&'()*+,;=]*#?)?$/;
 
 const validateLogin = celebrate({
   body: Joi.object().keys({

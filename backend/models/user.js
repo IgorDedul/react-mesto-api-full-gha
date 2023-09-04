@@ -12,16 +12,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    default: 'Исследователь',
+    default: 'Исследователь, учёный',
   },
   avatar: {
     type: String,
+    default: 'https://i.pinimg.com/736x/3f/0e/65/3f0e65097bd1c16017156c2a1b4b4ba1--jacques-cousteau-costume-ideas.jpg',
     validate: {
       validator: (string) => {
         validator.isURL(string);
       },
     },
-    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
   email: {
     type: String,

@@ -1,8 +1,8 @@
 const ALLOWED_CORS = [
-  'https://igord.nomoredomainsicu.ru',
-  'https://api.igord.nomoredomainsicu.ru',
-  'http://igord.nomoredomainsicu.ru',
-  'http://api.igord.nomoredomainsicu.ru',
+  'https://mesto.service.nomoredomainsclub.ru',
+  'https://api.mesto.service.nomoredomainsclub.ru',
+  'http://mesto.service.nomoredomainsclub.ru',
+  'http://api.mesto.service.nomoredomainsclub.ru',
   'localhost:3000',
 ];
 const ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';

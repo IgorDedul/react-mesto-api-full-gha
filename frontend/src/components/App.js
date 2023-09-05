@@ -180,11 +180,9 @@ function App() {
 
   // Авторизация профиля
   const handleAuthorization = (authData) => {
-    console.log(authData);
     return auth
       .authorize(authData)
         .then((data) => {
-          console.log(data); 
           if (data.token) {
             setIsLoggedIn(true);
             localStorage.setItem('token', data.token);

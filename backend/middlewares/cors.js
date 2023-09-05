@@ -3,7 +3,7 @@ const ALLOWED_CORS = [
   'https://api.igord.nomoredomainsicu.ru',
   'http://igord.nomoredomainsicu.ru',
   'http://api.igord.nomoredomainsicu.ru',
-  'localhost:3000',
+  'http://localhost:3000',
 ];
 const ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 

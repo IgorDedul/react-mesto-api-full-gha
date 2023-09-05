@@ -15,11 +15,11 @@ export const register = ({ email, password }) => {
   }).then((res) => checkResponse(res));
 };
 
-export const authorize = ({ email, password }) => {
+export const authorize = (authData) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify(authData),
   }).then((res) => checkResponse(res));
 };
 

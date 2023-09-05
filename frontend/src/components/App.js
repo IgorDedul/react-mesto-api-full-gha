@@ -179,9 +179,10 @@ function App() {
   };
 
   // Авторизация профиля
-  const handleAuthorization = ({ password, email }) => {
+  const handleAuthorization = (authData) => {
+    console.log(authData);
     return auth
-      .authorize(password, email)
+      .authorize(authData)
         .then((data) => {
           console.log(data); 
           if (data.token) {

@@ -4,7 +4,7 @@ const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const { secretKey } = 'dev-secret-key';
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET = 'secretKey' } = process.env;
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;

@@ -8,9 +8,9 @@ const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const { secretKey } = 'dev-secret-key';
+const secretKey = 'dev-secret-key';
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET = 'secretKey' } = process.env;
 
 //  Возвращает всех пользователей
 const getUsers = (req, res, next) => {

@@ -131,6 +131,31 @@ function App() {
       });
   }
 
+  function handleUpdateUser(data) {
+    api
+      .setUserInfo(data)
+      .then((result) => {
+        setCurrentUser({
+          ...currentUser,
+          name: result.name,
+          about: result.about,
+        });
+        closeAllPopups();
+      })
+      .catch(console.error);
+  }
+
+  function handleUpdateAvatar(data) {
+    api
+      .setUserAvatar(data)
+      .then((result) => {
+        setCurrentUser({ ...currentUser, avatar: result.avatar });
+        closeAllPopups();
+      })
+      .catch(console.error);
+  }
+
+  /**
   function handleUpdateUser (newUserInfo) {
     setIsLoading(true);
     api
@@ -162,6 +187,7 @@ function App() {
         setIsLoading(false);
       });
   };
+**/
 
   function handleAddPlaceSubmit (newData) {
     setIsLoading(true);

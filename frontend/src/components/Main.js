@@ -2,6 +2,8 @@ import React from "react";
 import { useContext } from "react";
 import Card from "./Card";
 
+import backgroundPath from '../images/Black-Background.jpg';
+
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 
@@ -16,7 +18,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, cards, onCardClick, onCa
               <div className="profile__container">
                 <div className="profile__container-avatar">
                   <img 
-                    src={currentUser.avatar} 
+                    src={currentUser.avatar || backgroundPath} 
                     alt="Фото-аватар" 
                     className="profile__avatar"
                   />

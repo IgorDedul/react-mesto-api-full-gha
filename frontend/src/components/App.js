@@ -36,7 +36,6 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  
 
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isRegistrationSuccessful, setIsRegistrationSuccessful] = React.useState(false);
@@ -50,7 +49,7 @@ function App() {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
       .then(([cards, userData]) => {
         setCurrentUser(userData);
-        setCards(cards);
+        setCards(cards.reverse());
       })
       .catch(console.error);
 }}, [isLoggedIn]);
@@ -121,9 +120,9 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(card._id)
+      .deleteCard(card)
       .then(() => {
-        setCards((state) => state.filter((c) => c._id !== card._id));
+        setCards((state) => state.filter((c) => c._id !== card));
         closeAllPopups();
       })
       .catch((err) => {
@@ -131,32 +130,7 @@ function App() {
       });
   }
 
-  function handleUpdateUser(data) {
-    api
-      .setUserInfo(data)
-      .then((result) => {
-        setCurrentUser({
-          ...currentUser,
-          name: result.name,
-          about: result.about,
-        });
-        closeAllPopups();
-      })
-      .catch(console.error);
-  }
-
-  function handleUpdateAvatar(data) {
-    api
-      .setUserAvatar(data)
-      .then((result) => {
-        setCurrentUser({ ...currentUser, avatar: result.avatar });
-        closeAllPopups();
-      })
-      .catch(console.error);
-  }
-
-  /**
-  function handleUpdateUser (newUserInfo) {
+    function handleUpdateUser (newUserInfo) {
     setIsLoading(true);
     api
       .setUserInfo(newUserInfo)
@@ -187,7 +161,6 @@ function App() {
         setIsLoading(false);
       });
   };
-**/
 
   function handleAddPlaceSubmit (newData) {
     setIsLoading(true);

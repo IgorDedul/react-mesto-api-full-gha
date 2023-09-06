@@ -47,6 +47,17 @@ function App() {
   //Получение данных данных пользователя и карточек
   React.useEffect(() => {
     if (isLoggedIn) {
+    Promise.all([api.getInitialCards(), api.getUserInfo()])
+      .then(([cards, userData]) => {
+        setCurrentUser(userData);
+        setCards(cards);
+      })
+      .catch(console.error);
+}}, [isLoggedIn]);
+  
+ /** 
+  React.useEffect(() => {
+    if (isLoggedIn) {
       api.getUserInfo()
         .then((res) => {
           setCurrentUser(res.data);
@@ -68,6 +79,8 @@ function App() {
         });
     }
   }, [isLoggedIn]);
+
+  **/
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);

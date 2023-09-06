@@ -54,32 +54,6 @@ function App() {
       .catch(console.error);
 }}, [isLoggedIn]);
   
- /** 
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      api.getUserInfo()
-        .then((res) => {
-          setCurrentUser(res.data);
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err.status}`);
-        });
-    }
-  }, [isLoggedIn]);
-
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      api.getInitialCards()
-        .then((data) => {
-          setCards(data.reverse());
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err.status}`);
-        });
-    }
-  }, [isLoggedIn]);
-
-  **/
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);

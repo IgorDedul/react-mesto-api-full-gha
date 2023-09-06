@@ -8,7 +8,6 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 function Main({onEditAvatar, onEditProfile, onAddPlace, cards, onCardClick, onCardLike, onCardDeleteClick}) {
 
   const currentUser = useContext(CurrentUserContext);
-  const { name, about, avatar } = currentUser;
 
     return (
       <>
@@ -17,7 +16,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, cards, onCardClick, onCa
               <div className="profile__container">
                 <div className="profile__container-avatar">
                   <img 
-                    src={avatar} 
+                    src={currentUser.avatar} 
                     alt="Фото-аватар" 
                     className="profile__avatar"
                   />
@@ -30,7 +29,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, cards, onCardClick, onCa
                 </div>
                 <div className="profile__describe">
                   <div className="profile__title-wrapper">
-                    <h1 className="profile__title">{name}</h1>
+                    <h1 className="profile__title">{currentUser.name || 'Имя'}</h1>
                     <button 
                         onClick={onEditProfile}
                         className="profile__edit-button" 
@@ -38,7 +37,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, cards, onCardClick, onCa
                         aria-label="Редактировать профиль">
                     </button>
                   </div>
-                  <p className="profile__subtitle">{about}</p>
+                  <p className="profile__subtitle">{currentUser.about || 'О себе'}</p>
                 </div>
               </div>
               <button 

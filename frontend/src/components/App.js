@@ -44,17 +44,30 @@ function App() {
 
   const history = useHistory();
 
+  //Получение данных данных пользователя и карточек
   React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, initialCards]) => {
-        setCurrentUser(userData);
-        setCards(initialCards);
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
-  }, []);
+    if (isLoggedIn) {
+      api.getUserInfo()
+        .then((res) => {
+          setCurrentUser(res.data);
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err.status}`);
+        });
+    }
+  }, [isLoggedIn]);
 
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      api.getInitialCards()
+        .then((data) => {
+          setCards(data.reverse());
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err.status}`);
+        });
+    }
+  }, [isLoggedIn]);
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -78,7 +91,7 @@ function App() {
 
   function handleCardLike(card) {
     // Проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some(user => user._id === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api
@@ -192,6 +205,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setIsLoggedIn(false);
         openInfoTooltip();
       });
   };

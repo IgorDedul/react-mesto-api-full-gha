@@ -49,7 +49,7 @@ function App() {
     if (isLoggedIn) {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
       .then(([cards, userData]) => {
-        setCurrentUser(userData.data);
+        setCurrentUser(userData);
         setCards(cards);
       })
       .catch(console.error);

@@ -48,7 +48,7 @@ function App() {
     if (isLoggedIn) {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
       .then(([cards, userData]) => {
-        setCurrentUser(userData);
+        setCurrentUser(userData.data);
         setCards(cards.reverse());
       })
       .catch(console.error);
@@ -77,7 +77,7 @@ function App() {
 
   function handleCardLike(card) {
     // Проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(user => user._id === currentUser._id);
+    const isLiked = card.likes.some(user => user === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api
@@ -109,6 +109,7 @@ function App() {
     api
       .setUserInfo(newUserInfo)
       .then((data) => {
+        console.log(data);
         setCurrentUser(data);
         closeAllPopups();
       })
@@ -140,8 +141,8 @@ function App() {
     setIsLoading(true);
     api
       .addCard(newData)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
+      .then((data) => {
+        setCards([data, ...cards]);
         closeAllPopups();
       })
       .catch((err) => {
@@ -191,7 +192,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-        setIsLoggedIn(false);
+        setIsRegistrationSuccessful(false);
         openInfoTooltip();
       });
   };
